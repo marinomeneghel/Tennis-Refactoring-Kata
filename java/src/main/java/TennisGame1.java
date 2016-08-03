@@ -1,3 +1,7 @@
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 
 public class TennisGame1 implements TennisGame {
     
@@ -12,33 +16,31 @@ public class TennisGame1 implements TennisGame {
     }
 
     public void wonPoint(String playerName) {
-        if (playerName == "player1")
+        if (isPlayerOne(playerName))
             m_score1 += 1;
         else
             m_score2 += 1;
     }
 
+    private boolean isPlayerOne(String playerName) {
+        return playerName.equals(player1Name);
+    }
+
+    private static Map<Integer, String> equalPointsMap;
+    static {
+        equalPointsMap = new HashMap<Integer, String>();
+        equalPointsMap.put(0, "Love-All");
+        equalPointsMap.put(1, "Fifteen-All");
+        equalPointsMap.put(2, "Thirty-All");
+    }
+
     public String getScore() {
         String score = "";
         int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
-            }
+        if(scoreEquals() && m_score1 >= 3) {
+            return "Deuce";
+        } else if (scoreEquals()) {
+            score = equalPointsMap.get(m_score1);
         }
         else if (m_score1>=4 || m_score2>=4)
         {
@@ -72,5 +74,9 @@ public class TennisGame1 implements TennisGame {
             }
         }
         return score;
+    }
+
+    private boolean scoreEquals() {
+        return m_score1==m_score2;
     }
 }
