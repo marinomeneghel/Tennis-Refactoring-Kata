@@ -25,24 +25,26 @@ public class TennisGame1 implements TennisGame {
         return firstPlayer.getName().equals(playerName);
     }
 
-    private static Map<Integer, String> equalPointsMap;
+    private static Map<Integer, String> scoreValueNames;
     static {
-        equalPointsMap = new HashMap<Integer, String>();
-        equalPointsMap.put(0, "Love-All");
-        equalPointsMap.put(1, "Fifteen-All");
-        equalPointsMap.put(2, "Thirty-All");
+        scoreValueNames = new HashMap<Integer, String>();
+        scoreValueNames.put(0, "Love");
+        scoreValueNames.put(1, "Fifteen");
+        scoreValueNames.put(2, "Thirty");
+        scoreValueNames.put(3, "Forty");
     }
 
+
     public String getScore() {
-        String scoreString = "";
-        int tempScore=0;
+        String scoreString;
         if(scoreEquals() && firstPlayer.getScore() >= 3) {
             return "Deuce";
+
         } else if (scoreEquals()) {
-            scoreString = equalPointsMap.get(firstPlayer.getScore());
+            scoreString = scoreValueNames.get(firstPlayer.getScore());
+            scoreString += "-All";
         }
-        else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4)
-        {
+        else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4) {
             int minusResult = firstPlayer.getScore()-secondPlayer.getScore();
             if (minusResult==1) scoreString ="Advantage player1";
             else if (minusResult ==-1) scoreString ="Advantage player2";
@@ -50,26 +52,15 @@ public class TennisGame1 implements TennisGame {
             else scoreString ="Win for player2";
         }
         else {
-            scoreString = getScoreStringValue(firstPlayer);
+            scoreString = getScoreStringValue(firstPlayer.getScore());
             scoreString += "-";
-            scoreString += getScoreStringValue(secondPlayer);
+            scoreString += getScoreStringValue(secondPlayer.getScore());
         }
         return scoreString;
     }
 
-    private String getScoreStringValue(Player player) {
-        switch(player.getScore()) {
-            case 0:
-                return "Love";
-            case 1:
-                return "Fifteen";
-            case 2:
-                return "Thirty";
-            case 3:
-                return "Forty";
-            default:
-                return null;
-        }
+    private String getScoreStringValue(int score) {
+        return scoreValueNames.get(score);
     }
 
     private boolean scoreEquals() {
