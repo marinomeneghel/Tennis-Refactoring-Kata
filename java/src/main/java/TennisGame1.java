@@ -3,12 +3,8 @@ import solution1.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
-
 public class TennisGame1 implements TennisGame {
     
-    private int m_score1 = 0;
-    private int m_score2 = 0;
     private final Player firstPlayer;
     private final Player secondPlayer;
 
@@ -18,10 +14,15 @@ public class TennisGame1 implements TennisGame {
     }
 
     public void wonPoint(String playerName) {
-        if (playerName.equals(firstPlayer.getName()))
-            m_score1 += 1;
-        else
-            m_score2 += 1;
+        getPlayerFromName(playerName).incrementScore();
+    }
+
+    private Player getPlayerFromName(String name) {
+        return isFirstPlayer(name) ? firstPlayer : secondPlayer;
+    }
+
+    private boolean isFirstPlayer(String playerName) {
+        return firstPlayer.getName().equals(playerName);
     }
 
     private static Map<Integer, String> equalPointsMap;
@@ -35,14 +36,14 @@ public class TennisGame1 implements TennisGame {
     public String getScore() {
         String score = "";
         int tempScore=0;
-        if(scoreEquals() && m_score1 >= 3) {
+        if(scoreEquals() && firstPlayer.getScore() >= 3) {
             return "Deuce";
         } else if (scoreEquals()) {
-            score = equalPointsMap.get(m_score1);
+            score = equalPointsMap.get(firstPlayer.getScore());
         }
-        else if (m_score1>=4 || m_score2>=4)
+        else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4)
         {
-            int minusResult = m_score1-m_score2;
+            int minusResult = firstPlayer.getScore()-secondPlayer.getScore();
             if (minusResult==1) score ="Advantage player1";
             else if (minusResult ==-1) score ="Advantage player2";
             else if (minusResult>=2) score = "Win for player1";
@@ -52,8 +53,8 @@ public class TennisGame1 implements TennisGame {
         {
             for (int i=1; i<3; i++)
             {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
+                if (i==1) tempScore = firstPlayer.getScore();
+                else { score+="-"; tempScore = secondPlayer.getScore();}
                 switch(tempScore)
                 {
                     case 0:
@@ -75,6 +76,6 @@ public class TennisGame1 implements TennisGame {
     }
 
     private boolean scoreEquals() {
-        return m_score1==m_score2;
+        return firstPlayer.getScore()==secondPlayer.getScore();
     }
 }
