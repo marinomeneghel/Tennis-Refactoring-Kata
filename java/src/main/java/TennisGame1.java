@@ -37,26 +37,24 @@ public class TennisGame1 implements TennisGame {
 
     public String getScore() {
         String scoreString;
-        if(scoreEquals() && firstPlayer.getScore() >= 3) {
-            return "Deuce";
+        if(scoreEquals()) {
+            return firstPlayer.getScore() >= 3 ? "Deuce" : getScoreForAll();
 
-        } else if (scoreEquals()) {
-            scoreString = scoreValueNames.get(firstPlayer.getScore());
-            scoreString += "-All";
-        }
-        else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4) {
+        } else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4) {
             int minusResult = firstPlayer.getScore()-secondPlayer.getScore();
             if (minusResult==1) scoreString ="Advantage player1";
             else if (minusResult ==-1) scoreString ="Advantage player2";
             else if (minusResult>=2) scoreString = "Win for player1";
             else scoreString ="Win for player2";
-        }
-        else {
-            scoreString = getScoreStringValue(firstPlayer.getScore());
-            scoreString += "-";
-            scoreString += getScoreStringValue(secondPlayer.getScore());
+
+        } else {
+            return getScoreStringValue(firstPlayer.getScore()) + "-" + getScoreStringValue(secondPlayer.getScore());
         }
         return scoreString;
+    }
+
+    private String getScoreForAll() {
+        return scoreValueNames.get(firstPlayer.getScore()) + "-All";
     }
 
     private String getScoreStringValue(int score) {
