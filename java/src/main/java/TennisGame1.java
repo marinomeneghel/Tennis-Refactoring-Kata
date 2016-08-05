@@ -1,7 +1,6 @@
 import solution1.Player;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class TennisGame1 implements TennisGame {
     
@@ -25,20 +24,10 @@ public class TennisGame1 implements TennisGame {
         return firstPlayer.getName().equals(playerName);
     }
 
-    private static Map<Integer, String> scoreValueNames;
-    static {
-        scoreValueNames = new HashMap<Integer, String>();
-        scoreValueNames.put(0, "Love");
-        scoreValueNames.put(1, "Fifteen");
-        scoreValueNames.put(2, "Thirty");
-        scoreValueNames.put(3, "Forty");
-    }
-
-
     public String getScore() {
         String scoreString;
         if(scoreEquals()) {
-            return firstPlayer.getScore() >= 3 ? "Deuce" : getScoreForAll();
+            return firstPlayer.getScore() >= 3 ? "Deuce" : firstPlayer.getScoreString() + "-All";
 
         } else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4) {
             int minusResult = firstPlayer.getScore()-secondPlayer.getScore();
@@ -48,17 +37,9 @@ public class TennisGame1 implements TennisGame {
             else scoreString ="Win for player2";
 
         } else {
-            return getScoreStringValue(firstPlayer.getScore()) + "-" + getScoreStringValue(secondPlayer.getScore());
+            return firstPlayer.getScoreString() + "-" + secondPlayer.getScoreString();
         }
         return scoreString;
-    }
-
-    private String getScoreForAll() {
-        return scoreValueNames.get(firstPlayer.getScore()) + "-All";
-    }
-
-    private String getScoreStringValue(int score) {
-        return scoreValueNames.get(score);
     }
 
     private boolean scoreEquals() {
