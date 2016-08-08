@@ -1,13 +1,11 @@
 import solution1.Player;
 
-import java.util.HashMap;
-
-public class TennisGame1 implements TennisGame {
+class TennisGame1 implements TennisGame {
     
     private final Player firstPlayer;
     private final Player secondPlayer;
 
-    public TennisGame1(String firstPlayerName, String secondPlayerName) {
+    TennisGame1(String firstPlayerName, String secondPlayerName) {
         firstPlayer = new Player(firstPlayerName);
         secondPlayer = new Player(secondPlayerName);
     }
@@ -25,24 +23,25 @@ public class TennisGame1 implements TennisGame {
     }
 
     public String getScore() {
-        String scoreString;
-        if(scoreEquals()) {
+        if(playersScoreEquals()) {
             return firstPlayer.getScore() >= 3 ? "Deuce" : firstPlayer.getScoreString() + "-All";
 
         } else if (firstPlayer.getScore()>=4 || secondPlayer.getScore()>=4) {
-            int minusResult = firstPlayer.getScore()-secondPlayer.getScore();
-            if (minusResult==1) scoreString ="Advantage player1";
-            else if (minusResult ==-1) scoreString ="Advantage player2";
-            else if (minusResult>=2) scoreString = "Win for player1";
-            else scoreString ="Win for player2";
+            int scoreDifference = getScoreDifference();
+            Player playerWithHigherScore = scoreDifference > 0 ? firstPlayer : secondPlayer;
+            String winOrAdvantage = Math.abs(scoreDifference) >= 2 ? "Win for " : "Advantage ";
+            return winOrAdvantage + playerWithHigherScore.getName();
 
         } else {
             return firstPlayer.getScoreString() + "-" + secondPlayer.getScoreString();
         }
-        return scoreString;
     }
 
-    private boolean scoreEquals() {
-        return firstPlayer.getScore() == secondPlayer.getScore();
+    private int getScoreDifference() {
+        return firstPlayer.getScore()-secondPlayer.getScore();
+    }
+
+    private boolean playersScoreEquals() {
+        return firstPlayer.doHaveSameScoreOf(secondPlayer);
     }
 }

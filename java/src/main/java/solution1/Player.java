@@ -39,4 +39,8 @@ public class Player {
     public String getScoreString() {
         return scoreValueNames.get(score);
     }
+
+    public boolean doHaveSameScoreOf(Player player) {
+        return score == player.getScore();
+    }
 }
